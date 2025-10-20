@@ -40,10 +40,12 @@ const PartnerRegister = () => {
         categoryAPI.getCategories(),
         locationAPI.getCities(),
       ]);
-      setCategories(categoriesRes.data);
-      setCities(citiesRes.data);
+      setCategories(Array.isArray(categoriesRes.data) ? categoriesRes.data : []);
+      setCities(Array.isArray(citiesRes.data) ? citiesRes.data : []);
     } catch (error) {
       console.error('Error loading data:', error);
+      setCategories([]);
+      setCities([]);
     }
   };
 

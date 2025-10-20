@@ -24,16 +24,20 @@ const HomePage = () => {
         locationAPI.getCities(),
       ]);
 
-      setCategories(categoriesRes.data);
-      setPopularBusinesses(businessesRes.data.results || businessesRes.data);
-      setCities(citiesRes.data);
+      setCategories(Array.isArray(categoriesRes.data) ? categoriesRes.data : []);
+      setPopularBusinesses(Array.isArray(businessesRes.data?.results) ? businessesRes.data.results : (Array.isArray(businessesRes.data) ? businessesRes.data : []));
+      setCities(Array.isArray(citiesRes.data) ? citiesRes.data : []);
       
-      if (citiesRes.data.length > 0) {
+      if (citiesRes.data && Array.isArray(citiesRes.data) && citiesRes.data.length > 0) {
         setSelectedCity(citiesRes.data[0].id);
       }
     } catch (error) {
       console.error('Error loading data:', error);
       toast.error('خطا در بارگذاری اطلاعات');
+      // Set default empty arrays to prevent errors
+      setCategories([]);
+      setPopularBusinesses([]);
+      setCities([]);
     } finally {
       setLoading(false);
     }
