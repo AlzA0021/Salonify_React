@@ -4,7 +4,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // Customer Pages
-import CustomerLayout from './components/customer/CustomerLayout';
+import CustomerLayout from './pages/customer/CustomerLayout';
 import HomePage from './pages/customer/HomePage';
 import SearchPage from './pages/customer/SearchPage';
 import BusinessDetailPage from './pages/customer/BusinessDetailPage';
@@ -15,7 +15,7 @@ import LoginPage from './pages/customer/LoginPage';
 import RegisterPage from './pages/customer/RegisterPage';
 
 // Partner Pages
-import PartnerLayout from './components/partner/PartnerLayout';
+import PartnerLayout from './pages/partner/PartnerLayout';
 import PartnerDashboard from './pages/partner/PartnerDashboard';
 import PartnerCalendar from './pages/partner/PartnerCalendar';
 import PartnerServices from './pages/partner/PartnerServices';
