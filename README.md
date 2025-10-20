@@ -1,4 +1,4 @@
-# 🎨 Fresha Clone - پلتفرم رزرو آنلاین خدمات زیبایی
+# 🎨 SaloniFY - پلتفرم رزرو آنلاین خدمات زیبایی
 
 یک پلتفرم کامل و حرفه‌ای برای رزرو آنلاین خدمات زیبایی و سلامت، شبیه به Fresha
 
@@ -60,7 +60,7 @@ npm run build
 ## 📁 ساختار پروژه
 
 ```
-fresha-clone-frontend/
+frontend/
 ├── public/
 │   └── index.html
 ├── src/
