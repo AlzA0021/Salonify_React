@@ -8,6 +8,7 @@ const PartnerLogin = () => {
   
   const [formData, setFormData] = useState({
     phone_number: '',
+    phone_number: '',
     password: '',
   });
   const [loading, setLoading] = useState(false);
@@ -77,8 +78,8 @@ const PartnerLogin = () => {
           <form onSubmit={handleSubmit} className="mt-8 space-y-6">
             {/* phone_number */}
             <div>
-              <label htmlFor="phone_number" className="block text-sm font-medium text-gray-700 mb-2">
-                شماره هراه 
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                ایمیل
               </label>
               <input
                 id="phone_number"
@@ -86,8 +87,8 @@ const PartnerLogin = () => {
                 type="tel"
                 value={formData.phone_number}
                 onChange={handleChange}
-                placeholder="09123456789"
-                dir="ltr"
+                className={`input-field ${errors.email ? 'border-red-500' : ''}`}
+                placeholder="example@email.com"
               />
               {errors.phone_number && (
                 <p className="mt-1 text-sm text-red-600">{errors.phone_number}</p>
