@@ -78,10 +78,10 @@ const LoginPage = () => {
 
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Email */}
+            {/* phone_number */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                ایمیل
+              <label htmlFor="phone_number" className="block text-sm font-medium text-gray-700 mb-2">
+                شماره هراه 
               </label>
               <input
                 id="phone_number"

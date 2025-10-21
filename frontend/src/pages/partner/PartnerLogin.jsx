@@ -7,7 +7,7 @@ const PartnerLogin = () => {
   const { login } = usePartnerAuth();
   
   const [formData, setFormData] = useState({
-    email: '',
+    phone_number: '',
     password: '',
   });
   const [loading, setLoading] = useState(false);
@@ -24,10 +24,10 @@ const PartnerLogin = () => {
   const validate = () => {
     const newErrors = {};
     
-    if (!formData.email) {
-      newErrors.email = 'ایمیل الزامی است';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'ایمیل معتبر نیست';
+    if (!formData.phone_number) {
+      newErrors.phone_number = 'شماره تلفن الزامی است';
+    } else if (!/^09\d{9}$/.test(formData.phone_number)) {
+      newErrors.phone_number = 'شماره تلفن باید با فرمت 09xxxxxxxxx باشد';
     }
     
     if (!formData.password) {
@@ -75,22 +75,22 @@ const PartnerLogin = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-            {/* Email */}
+            {/* phone_number */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                ایمیل
+              <label htmlFor="phone_number" className="block text-sm font-medium text-gray-700 mb-2">
+                شماره هراه 
               </label>
               <input
-                id="email"
-                name="email"
-                type="email"
-                value={formData.email}
+                id="phone_number"
+                name="phone_number"
+                type="tel"
+                value={formData.phone_number}
                 onChange={handleChange}
-                className={`input-field ${errors.email ? 'border-red-500' : ''}`}
-                placeholder="example@email.com"
+                placeholder="09123456789"
+                dir="ltr"
               />
-              {errors.email && (
-                <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+              {errors.phone_number && (
+                <p className="mt-1 text-sm text-red-600">{errors.phone_number}</p>
               )}
             </div>
 
