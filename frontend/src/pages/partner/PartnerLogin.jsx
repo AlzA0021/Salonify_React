@@ -29,6 +29,10 @@ const PartnerLogin = () => {
       newErrors.phone_number = 'شماره تلفن الزامی است';
     } else if (!/^09\d{9}$/.test(formData.phone_number)) {
       newErrors.phone_number = 'شماره تلفن باید با فرمت 09xxxxxxxxx باشد';
+    if (!formData.phone_number) {
+      newErrors.phone_number = 'شماره تلفن الزامی است';
+    } else if (!/^09\d{9}$/.test(formData.phone_number)) {
+      newErrors.phone_number = 'شماره تلفن باید با فرمت 09xxxxxxxxx باشد';
     }
     
     if (!formData.password) {
