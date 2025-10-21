@@ -78,10 +78,10 @@ const LoginPage = () => {
 
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Email */}
+            {/* Phone Number */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                ایمیل
+              <label htmlFor="phone_number" className="block text-sm font-medium text-gray-700 mb-2">
+                شماره تلفن
               </label>
               <input
                 id="phone_number"
@@ -89,6 +89,7 @@ const LoginPage = () => {
                 type="tel"
                 value={formData.phone_number}
                 onChange={handleChange}
+                className={`input-field ${errors.phone_number ? 'border-red-500' : ''}`}
                 placeholder="09123456789"
                 dir="ltr"
               />
