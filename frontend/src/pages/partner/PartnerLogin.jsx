@@ -8,7 +8,6 @@ const PartnerLogin = () => {
   
   const [formData, setFormData] = useState({
     phone_number: '',
-    phone_number: '',
     password: '',
   });
   const [loading, setLoading] = useState(false);
@@ -25,10 +24,6 @@ const PartnerLogin = () => {
   const validate = () => {
     const newErrors = {};
     
-    if (!formData.phone_number) {
-      newErrors.phone_number = 'شماره تلفن الزامی است';
-    } else if (!/^09\d{9}$/.test(formData.phone_number)) {
-      newErrors.phone_number = 'شماره تلفن باید با فرمت 09xxxxxxxxx باشد';
     if (!formData.phone_number) {
       newErrors.phone_number = 'شماره تلفن الزامی است';
     } else if (!/^09\d{9}$/.test(formData.phone_number)) {
@@ -83,7 +78,7 @@ const PartnerLogin = () => {
             {/* phone_number */}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                ایمیل
+                شماره موبایل
               </label>
               <input
                 id="phone_number"
@@ -91,9 +86,14 @@ const PartnerLogin = () => {
                 type="tel"
                 value={formData.phone_number}
                 onChange={handleChange}
-                className={`input-field ${errors.email ? 'border-red-500' : ''}`}
-                placeholder="example@email.com"
+                placeholder="09123456789"
+                dir="ltr"
+                className={`input-field ${errors.phone_number ? 'border-red-500' : ''}`}
+                placeholder="09123456789"
+                dir="ltr"
               />
+              {errors.phone_number && (
+                <p className="mt-1 text-sm text-red-600">{errors.phone_number}</p>
               {errors.phone_number && (
                 <p className="mt-1 text-sm text-red-600">{errors.phone_number}</p>
               )}
