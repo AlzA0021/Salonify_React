@@ -29,9 +29,21 @@ const BusinessDetailPage = () => {
       ]);
 
       setBusiness(businessRes.data);
-      setServices(servicesRes.data);
-      setStaff(staffRes.data);
-      setReviews(reviewsRes.data.results || reviewsRes.data);
+
+        const servicesData = Array.isArray(servicesRes.data) 
+          ? servicesRes.data 
+          : (servicesRes.data.results || []);
+        setServices(servicesData);
+
+        const staffData = Array.isArray(staffRes.data)
+          ? staffRes.data
+          : (staffRes.data.results || []);
+        setStaff(staffData);
+
+        const reviewsData = Array.isArray(reviewsRes.data)
+          ? reviewsRes.data
+          : (reviewsRes.data.results || []);
+        setReviews(reviewsData);
     } catch (error) {
       console.error('Error loading business:', error);
       toast.error('خطا در بارگذاری اطلاعات');

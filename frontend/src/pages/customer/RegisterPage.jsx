@@ -27,30 +27,16 @@ const RegisterPage = () => {
   const validate = () => {
     const newErrors = {};
     
-    if (!formData.name) {
-      newErrors.name = 'نام و نام خانوادگی الزامی است';
-    }
-    
-    if (!formData.email) {
-      newErrors.email = 'ایمیل الزامی است';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'ایمیل معتبر نیست';
-    }
-    
-    if (!formData.phone) {
-      newErrors.phone = 'شماره موبایل الزامی است';
-    } else if (!/^09\d{9}$/.test(formData.phone)) {
-      newErrors.phone = 'شماره موبایل معتبر نیست';
+    if (!formData.phone_number) {
+      newErrors.phone_number = 'شماره تلفن الزامی است';
+    } else if (!/^09\d{9}$/.test(formData.phone_number)) {
+      newErrors.phone_number = 'شماره تلفن باید با فرمت 09xxxxxxxxx باشد';
     }
     
     if (!formData.password) {
       newErrors.password = 'رمز عبور الزامی است';
     } else if (formData.password.length < 6) {
       newErrors.password = 'رمز عبور باید حداقل ۶ کاراکتر باشد';
-    }
-    
-    if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'رمز عبور و تکرار آن مطابقت ندارند';
     }
     
     return newErrors;
@@ -132,23 +118,23 @@ const RegisterPage = () => {
               )}
             </div>
 
-            {/* Phone */}
+            {/* Phone Number */}
             <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                شماره موبایل
+              <label htmlFor="phone_number" className="block text-sm font-medium text-gray-700 mb-2">
+                شماره تلفن
               </label>
               <input
-                id="phone"
-                name="phone"
+                id="phone_number"
+                name="phone_number"
                 type="tel"
-                value={formData.phone}
+                value={formData.phone_number}
                 onChange={handleChange}
-                className={`input-field ${errors.phone ? 'border-red-500' : ''}`}
-                placeholder="۰۹۱۲۳۴۵۶۷۸۹"
+                className={`input-field ${errors.phone_number ? 'border-red-500' : ''}`}
+                placeholder="09123456789"
                 dir="ltr"
               />
-              {errors.phone && (
-                <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
+              {errors.phone_number && (
+                <p className="mt-1 text-sm text-red-600">{errors.phone_number}</p>
               )}
             </div>
 

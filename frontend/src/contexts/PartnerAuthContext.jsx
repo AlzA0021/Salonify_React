@@ -43,20 +43,24 @@ export const PartnerAuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       const response = await partnerAuthAPI.login(credentials);
-      const { token, partner: partnerData, business: businessData } = response.data;
+      const { access, partner, business } = response.data;  // ✅ FIXED: access به جای token
       
-      localStorage.setItem('partnerToken', token);
-      localStorage.setItem('partner', JSON.stringify(partnerData));
-      localStorage.setItem('business', JSON.stringify(businessData));
+      localStorage.setItem('partnerToken', access);  // ✅ FIXED
+      localStorage.setItem('partner', JSON.stringify(partner));
+      localStorage.setItem('business', JSON.stringify(business));
       
-      setPartner(partnerData);
-      setBusiness(businessData);
+      setPartner(partner);
+      setBusiness(business);
       setIsAuthenticated(true);
       
       toast.success('خوش آمدید!');
       return { success: true };
     } catch (error) {
-      const message = error.response?.data?.message || 'خطا در ورود';
+      const errorData = error.response?.data;
+      const message = errorData?.detail || 
+                      errorData?.phone_number?.[0] ||
+                      errorData?.password?.[0] ||
+                      'خطا در ورود';
       toast.error(message);
       return { success: false, error: message };
     }
@@ -65,26 +69,29 @@ export const PartnerAuthProvider = ({ children }) => {
   const register = async (businessData) => {
     try {
       const response = await partnerAuthAPI.register(businessData);
-      const { token, partner: partnerData, business: newBusiness } = response.data;
+      const { message, phone_number } = response.data;  // ✅ FIXED
       
-      localStorage.setItem('partnerToken', token);
-      localStorage.setItem('partner', JSON.stringify(partnerData));
-      localStorage.setItem('business', JSON.stringify(newBusiness));
-      
-      setPartner(partnerData);
-      setBusiness(newBusiness);
-      setIsAuthenticated(true);
-      
-      toast.success('کسب‌وکار شما با موفقیت ثبت شد!');
-      return { success: true };
+      toast.success(message || 'ثبت‌نام موفق! لطفاً شماره خود را تایید کنید');
+      return { success: true, phone_number };
     } catch (error) {
-      const message = error.response?.data?.message || 'خطا در ثبت‌نام';
+      const errorData = error.response?.data;
+      let message = 'خطا در ثبت‌نام';
+      
+      if (errorData) {
+        message = errorData.phone_number?.[0] || 
+                  errorData.email?.[0] ||
+                  errorData.password?.[0] ||
+                  errorData.business_name?.[0] ||
+                  errorData.detail ||
+                  message;
+      }
+      
       toast.error(message);
       return { success: false, error: message };
     }
   };
 
-  const logout = async () => {
+  const logout = async () => {  // ✅ FIXED: تابع اضافه شد
     try {
       await partnerAuthAPI.logout();
     } catch (error) {
@@ -105,7 +112,7 @@ export const PartnerAuthProvider = ({ children }) => {
       const response = await partnerAuthAPI.updateBusiness(data);
       setBusiness(response.data);
       localStorage.setItem('business', JSON.stringify(response.data));
-      toast.success('اطلاعات کسب‌وکار بروزرسانی شد');
+      toast.success('اطلاعات کسب‌وکار با موفقیت بروزرسانی شد');
       return { success: true };
     } catch (error) {
       const message = error.response?.data?.message || 'خطا در بروزرسانی';

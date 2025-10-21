@@ -40,18 +40,22 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       const response = await authAPI.login(credentials);
-      const { token, user: userData } = response.data;
+      const { access, user } = response.data;  // ✅ FIXED: access به جای token
       
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(userData));
+      localStorage.setItem('token', access);  // ✅ FIXED
+      localStorage.setItem('user', JSON.stringify(user));
       
-      setUser(userData);
+      setUser(user);
       setIsAuthenticated(true);
       
       toast.success('خوش آمدید!');
       return { success: true };
     } catch (error) {
-      const message = error.response?.data?.message || 'خطا در ورود';
+      const errorData = error.response?.data;
+      const message = errorData?.detail || 
+                      errorData?.phone_number?.[0] ||
+                      errorData?.password?.[0] ||
+                      'خطا در ورود';
       toast.error(message);
       return { success: false, error: message };
     }
@@ -60,24 +64,28 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       const response = await authAPI.register(userData);
-      const { token, user: newUser } = response.data;
+      const { message, phone_number } = response.data;  // ✅ FIXED: API فقط message برمی‌گرداند
       
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(newUser));
-      
-      setUser(newUser);
-      setIsAuthenticated(true);
-      
-      toast.success('ثبت‌نام با موفقیت انجام شد!');
-      return { success: true };
+      toast.success(message || 'ثبت‌نام موفق! لطفاً شماره خود را تایید کنید');
+      return { success: true, phone_number };
     } catch (error) {
-      const message = error.response?.data?.message || 'خطا در ثبت‌نام';
+      const errorData = error.response?.data;
+      let message = 'خطا در ثبت‌نام';
+      
+      if (errorData) {
+        message = errorData.phone_number?.[0] || 
+                  errorData.email?.[0] ||
+                  errorData.password?.[0] ||
+                  errorData.detail ||
+                  message;
+      }
+      
       toast.error(message);
       return { success: false, error: message };
     }
   };
 
-  const logout = async () => {
+  const logout = async () => {  // ✅ FIXED: تابع اضافه شد
     try {
       await authAPI.logout();
     } catch (error) {

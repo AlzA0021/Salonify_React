@@ -12,6 +12,7 @@ import BookingPage from './pages/customer/BookingPage';
 import MyBookingsPage from './pages/customer/MyBookingsPage';
 import ProfilePage from './pages/customer/ProfilePage';
 import LoginPage from './pages/customer/LoginPage';
+import ForgotPasswordPage from './pages/customer/ForgotPasswordPage';
 import RegisterPage from './pages/customer/RegisterPage';
 
 // Partner Pages
@@ -49,6 +50,7 @@ function App() {
                 <Route path="booking/:businessId" element={<BookingPage />} />
                 <Route path="login" element={<LoginPage />} />
                 <Route path="register" element={<RegisterPage />} />
+                <Route path="forgot-password" element={<ForgotPasswordPage />} />
                 
                 {/* Protected Customer Routes */}
                 <Route path="my-bookings" element={

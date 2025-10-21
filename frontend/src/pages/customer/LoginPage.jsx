@@ -8,7 +8,7 @@ const LoginPage = () => {
   const { login } = useAuth();
   
   const [formData, setFormData] = useState({
-    email: '',
+    phone_number: '',
     password: '',
   });
   const [loading, setLoading] = useState(false);
@@ -25,10 +25,10 @@ const LoginPage = () => {
   const validate = () => {
     const newErrors = {};
     
-    if (!formData.email) {
-      newErrors.email = 'ایمیل الزامی است';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'ایمیل معتبر نیست';
+    if (!formData.phone_number) {
+      newErrors.phone_number = 'شماره تلفن الزامی است';
+    } else if (!/^09\d{9}$/.test(formData.phone_number)) {
+      newErrors.phone_number = 'شماره تلفن باید با فرمت 09xxxxxxxxx باشد';
     }
     
     if (!formData.password) {
@@ -84,16 +84,16 @@ const LoginPage = () => {
                 ایمیل
               </label>
               <input
-                id="email"
-                name="email"
-                type="email"
-                value={formData.email}
+                id="phone_number"
+                name="phone_number"
+                type="tel"
+                value={formData.phone_number}
                 onChange={handleChange}
-                className={`input-field ${errors.email ? 'border-red-500' : ''}`}
-                placeholder="example@email.com"
+                placeholder="09123456789"
+                dir="ltr"
               />
-              {errors.email && (
-                <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+              {errors.phone_number && (
+                <p className="mt-1 text-sm text-red-600">{errors.phone_number}</p>
               )}
             </div>
 
@@ -125,9 +125,9 @@ const LoginPage = () => {
                 />
                 <span className="mr-2 text-sm text-gray-600">مرا به خاطر بسپار</span>
               </label>
-              <a href="#" className="text-sm text-primary-600 hover:text-primary-700">
+              <Link to="/forgot-password" className="text-sm text-primary-600 hover:text-primary-700">
                 فراموشی رمز عبور
-              </a>
+              </Link>
             </div>
 
             {/* Submit Button */}
