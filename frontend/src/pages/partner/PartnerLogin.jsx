@@ -75,9 +75,9 @@ const PartnerLogin = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-            {/* phone_number */}
+            {/* Phone Number */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="phone_number" className="block text-sm font-medium text-gray-700 mb-2">
                 شماره موبایل
               </label>
               <input
@@ -89,11 +89,7 @@ const PartnerLogin = () => {
                 placeholder="09123456789"
                 dir="ltr"
                 className={`input-field ${errors.phone_number ? 'border-red-500' : ''}`}
-                placeholder="09123456789"
-                dir="ltr"
               />
-              {errors.phone_number && (
-                <p className="mt-1 text-sm text-red-600">{errors.phone_number}</p>
               {errors.phone_number && (
                 <p className="mt-1 text-sm text-red-600">{errors.phone_number}</p>
               )}
