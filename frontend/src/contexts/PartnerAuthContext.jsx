@@ -67,6 +67,7 @@ export const PartnerAuthProvider = ({ children }) => {
   };
 
   const register = async (businessData) => {
+    
     try {
       const response = await partnerAuthAPI.register(businessData);
       const { message, phone_number } = response.data;  // ✅ FIXED

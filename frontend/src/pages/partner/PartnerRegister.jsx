@@ -34,18 +34,47 @@ const PartnerRegister = () => {
     loadData();
   }, []);
 
+  // === تابع کمکی برای پیدا کردن آرایه در دل پاسخ سرور ===
+  const extractListFromResponse = (res, typeName) => {
+    console.log(`بررسی ساختار ${typeName}:`, res);
+
+    // حالت ۱: اگر خودِ پاسخ مستقیماً آرایه باشد
+    if (Array.isArray(res)) return res;
+
+    // حالت ۲: اگر response.data آرایه باشد
+    if (res.data && Array.isArray(res.data)) return res.data;
+
+    // حالت ۳: (محتمل‌ترین حالت برای شما) اگر response.data یک آبجکت باشد که داخلش آرایه دارد
+    // مثلاً response.data.data یا response.data.categories
+    if (res.data && typeof res.data === 'object') {
+        if (Array.isArray(res.data.data)) return res.data.data;
+        if (Array.isArray(res.data.results)) return res.data.results;
+        if (Array.isArray(res.data.items)) return res.data.items;
+        // اگر اسم فیلد دقیقاً اسم موجودیت باشد (مثلاً categories)
+        if (res.data.categories && Array.isArray(res.data.categories)) return res.data.categories;
+        if (res.data.cities && Array.isArray(res.data.cities)) return res.data.cities;
+    }
+
+    console.warn(`آرایه‌ای برای ${typeName} پیدا نشد!`);
+    return [];
+  };
+
   const loadData = async () => {
     try {
       const [categoriesRes, citiesRes] = await Promise.all([
         categoryAPI.getCategories(),
         locationAPI.getCities(),
       ]);
-      setCategories(Array.isArray(categoriesRes.data) ? categoriesRes.data : []);
-      setCities(Array.isArray(citiesRes.data) ? citiesRes.data : []);
+
+      const finalCategories = extractListFromResponse(categoriesRes, "دسته‌بندی");
+      const finalCities = extractListFromResponse(citiesRes, "شهرها");
+
+      console.log("لیست نهایی استخراج شده دسته‌بندی:", finalCategories);
+      
+      setCategories(finalCategories);
+      setCities(finalCities);
     } catch (error) {
       console.error('Error loading data:', error);
-      setCategories([]);
-      setCities([]);
     }
   };
 
@@ -110,11 +139,15 @@ const PartnerRegister = () => {
 
   const handleSubmit = async () => {
     setLoading(true);
-    const result = await register(formData);
-    setLoading(false);
-
-    if (result.success) {
-      navigate('/partner/dashboard');
+    try {
+        const result = await register(formData);
+        if (result.success) {
+            navigate('/partner/dashboard');
+        }
+    } catch (error) {
+        console.error("Registration error:", error);
+    } finally {
+        setLoading(false);
     }
   };
 
@@ -180,7 +213,7 @@ const PartnerRegister = () => {
                   type="text"
                   value={formData.ownerName}
                   onChange={handleChange}
-                  className={`input-field ${errors.ownerName ? 'border-red-500' : ''}`}
+                  className={`input-field w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary-500 outline-none ${errors.ownerName ? 'border-red-500' : 'border-gray-300'}`}
                   placeholder="نام کامل خود را وارد کنید"
                 />
                 {errors.ownerName && (
@@ -198,7 +231,7 @@ const PartnerRegister = () => {
                   type="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className={`input-field ${errors.email ? 'border-red-500' : ''}`}
+                  className={`input-field w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary-500 outline-none ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
                   placeholder="example@email.com"
                 />
                 {errors.email && (
@@ -216,7 +249,7 @@ const PartnerRegister = () => {
                   type="tel"
                   value={formData.phone}
                   onChange={handleChange}
-                  className={`input-field ${errors.phone ? 'border-red-500' : ''}`}
+                  className={`input-field w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary-500 outline-none ${errors.phone ? 'border-red-500' : 'border-gray-300'}`}
                   placeholder="۰۹۱۲۳۴۵۶۷۸۹"
                   dir="ltr"
                 />
@@ -235,7 +268,7 @@ const PartnerRegister = () => {
                   type="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className={`input-field ${errors.password ? 'border-red-500' : ''}`}
+                  className={`input-field w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary-500 outline-none ${errors.password ? 'border-red-500' : 'border-gray-300'}`}
                   placeholder="حداقل ۶ کاراکتر"
                 />
                 {errors.password && (
@@ -253,7 +286,7 @@ const PartnerRegister = () => {
                   type="password"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className={`input-field ${errors.confirmPassword ? 'border-red-500' : ''}`}
+                  className={`input-field w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary-500 outline-none ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'}`}
                   placeholder="رمز عبور را مجدداً وارد کنید"
                 />
                 {errors.confirmPassword && (
@@ -278,15 +311,15 @@ const PartnerRegister = () => {
                   type="text"
                   value={formData.businessName}
                   onChange={handleChange}
-                  className={`input-field ${errors.businessName ? 'border-red-500' : ''}`}
-                  placeholder="مثال: سالن زیبایی آرمیتا"
+                  className={`input-field w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary-500 outline-none ${errors.businessName ? 'border-red-500' : 'border-gray-300'}`}
+                  placeholder="مثال: سالن زیبایی هانی"
                 />
                 {errors.businessName && (
                   <p className="mt-1 text-sm text-red-600">{errors.businessName}</p>
                 )}
               </div>
 
-              {/* Category */}
+              {/* Category Dropdown */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   دسته‌بندی
@@ -295,11 +328,13 @@ const PartnerRegister = () => {
                   name="categoryId"
                   value={formData.categoryId}
                   onChange={handleChange}
-                  className={`input-field ${errors.categoryId ? 'border-red-500' : ''}`}
+                  className={`input-field w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary-500 outline-none bg-white ${errors.categoryId ? 'border-red-500' : 'border-gray-300'}`}
                 >
                   <option value="">انتخاب دسته‌بندی</option>
                   {categories.map((cat) => (
-                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                    <option key={cat.id || cat._id} value={cat.id || cat._id}>
+                      {cat.name || cat.title || cat.label || 'بدون نام'}
+                    </option>
                   ))}
                 </select>
                 {errors.categoryId && (
@@ -307,7 +342,7 @@ const PartnerRegister = () => {
                 )}
               </div>
 
-              {/* City */}
+              {/* City Dropdown */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   شهر
@@ -316,11 +351,13 @@ const PartnerRegister = () => {
                   name="cityId"
                   value={formData.cityId}
                   onChange={handleChange}
-                  className={`input-field ${errors.cityId ? 'border-red-500' : ''}`}
+                  className={`input-field w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary-500 outline-none bg-white ${errors.cityId ? 'border-red-500' : 'border-gray-300'}`}
                 >
                   <option value="">انتخاب شهر</option>
                   {cities.map((city) => (
-                    <option key={city.id} value={city.id}>{city.name}</option>
+                    <option key={city.id || city._id} value={city.id || city._id}>
+                      {city.name || city.title || 'بدون نام'}
+                    </option>
                   ))}
                 </select>
                 {errors.cityId && (
@@ -338,7 +375,7 @@ const PartnerRegister = () => {
                   value={formData.address}
                   onChange={handleChange}
                   rows="3"
-                  className={`input-field resize-none ${errors.address ? 'border-red-500' : ''}`}
+                  className={`input-field w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary-500 outline-none resize-none ${errors.address ? 'border-red-500' : 'border-gray-300'}`}
                   placeholder="آدرس دقیق کسب‌وکار خود را وارد کنید"
                 ></textarea>
                 {errors.address && (
@@ -356,7 +393,7 @@ const PartnerRegister = () => {
                   value={formData.description}
                   onChange={handleChange}
                   rows="4"
-                  className="input-field resize-none"
+                  className="input-field w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 outline-none resize-none"
                   placeholder="توضیحات مختصری درباره کسب‌وکار خود بنویسید..."
                 ></textarea>
               </div>
@@ -368,7 +405,7 @@ const PartnerRegister = () => {
             {step > 1 && (
               <button
                 onClick={() => setStep(step - 1)}
-                className="btn-outline flex-1"
+                className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 font-medium transition-colors"
               >
                 بازگشت
               </button>
@@ -376,11 +413,11 @@ const PartnerRegister = () => {
             <button
               onClick={handleNext}
               disabled={loading}
-              className="btn-primary flex-1"
+              className="flex-1 px-6 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700 font-medium transition-colors shadow-lg shadow-primary-600/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             >
               {loading ? (
                 <>
-                  <div className="spinner ml-2"></div>
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin ml-2"></div>
                   در حال ثبت...
                 </>
               ) : step === 1 ? (
